@@ -22,7 +22,9 @@ const resources = {
     notice:"For estimation and general measurement only. Verify legal/property measurements against official records and a qualified surveyor.",
     irregularInfo:"For irregular plots, divide the land into triangles, calculate each triangle, then add the areas.",
     triangleInfo:"For base/height, Area = ½ × Base × Height. For three sides, Heron's formula is used.",
-    converter:"Converter"
+    converter:"Converter",
+    rightsreserved: "All rights reserved.",
+    designDeveloped: "Design & Developed By"
   }},
   bn: { translation: {
     brand:"ভূমি মাপ", tagline:"সহজে জমি মাপুন, সঠিকভাবে হিসাব করুন",
@@ -44,7 +46,9 @@ const resources = {
     notice:"এটি সাধারণ ও আনুমানিক হিসাবের জন্য। আইনগত বা সম্পত্তির কাজে সরকারি রেকর্ড ও যোগ্য সার্ভেয়ারের মাধ্যমে পরিমাপ যাচাই করুন।",
     irregularInfo:"অনিয়মিত জমিকে কয়েকটি ত্রিভুজে ভাগ করে প্রতিটি ত্রিভুজের ক্ষেত্রফল বের করে যোগ করুন।",
     triangleInfo:"ভিত্তি/উচ্চতার জন্য ক্ষেত্রফল = ½ × ভিত্তি × উচ্চতা। তিন বাহুর জন্য Heron's formula ব্যবহার করা হয়।",
-    converter:"রূপান্তর"
+    converter:"রূপান্তর",
+    rightsreserved: "সর্বস্বত্ব সংরক্ষিত।",
+    designDeveloped: "ডিজাইন ও ডেভেলপ করেছেন"
   }}
 };
 

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://your-domain.example/</loc></url>
-  <url><loc>https://your-domain.example/calculator</loc></url>
-  <url><loc>https://your-domain.example/converter</loc></url>
-  <url><loc>https://your-domain.example/units</loc></url>
-  <url><loc>https://your-domain.example/guide</loc></url>
-  <url><loc>https://your-domain.example/faq</loc></url>
+  <url><loc>https://bhumi-map.netlify.app/</loc></url>
+  <url><loc>https://bhumi-map.netlify.app/calculator</loc></url>
+  <url><loc>https://bhumi-map.netlify.app/converter</loc></url>
+  <url><loc>https://bhumi-map.netlify.app/units</loc></url>
+  <url><loc>https://bhumi-map.netlify.app/guide</loc></url>
+  <url><loc>https://bhumi-map.netlify.app/faq</loc></url>
 </urlset>
