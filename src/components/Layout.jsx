@@ -15,7 +15,9 @@ export default function Layout({ children }) {
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
     document.documentElement.classList.toggle("dark", theme === "dark");
+    document.documentElement.classList.toggle("bn", language === "bn");
     document.documentElement.lang = language;
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "dark" ? "#0b1220" : "#2563eb");
     localStorage.setItem("bhumi-language", language);
     i18n.changeLanguage(language);
   }, [theme, language, i18n]);
@@ -28,6 +30,7 @@ export default function Layout({ children }) {
     ["/guide", t("guide")],
     ["/history", t("history")],
     ["/faq", t("faq")],
+    ["/about", t("about")],
   ];
 
   return (

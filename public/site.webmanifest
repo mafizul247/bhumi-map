@@ -1,0 +1,16 @@
+{
+  "name": "Bhumi Map | ভূমি মাপ - Bangladesh Land Measurement Calculator",
+  "short_name": "Bhumi Map",
+  "description": "Calculate Bangladesh land area in Katha, Decimal, Bigha, Acre, Hectare and Square Feet for rectangle, triangle, parallelogram, trapezium, rhombus and circular plots.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "lang": "en",
+  "icons": [
+    { "src": "/favicon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/favicon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}

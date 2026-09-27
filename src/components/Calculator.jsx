@@ -2,35 +2,108 @@ import {useState} from "react";
 import {useDispatch} from "react-redux";
 import {addHistory} from "../redux/store";
 import {useTranslation} from "react-i18next";
-import {rectangle,square,triangleBaseHeight,triangleSides,fromSqft,fmt} from "../utils/land";
+import {
+  rectangle, square, triangleBaseHeight, triangleSides,
+  parallelogramBaseHeight, parallelogramSidesAngle,
+  trapezium, rhombusDiagonals, rhombusSideHeight,
+  circleRadius, circleDiameter, fromSqft, fmt
+} from "../utils/land";
 import {Save, Printer, RotateCcw} from "lucide-react";
+
+const defaultMethodFor = (shape) => {
+  if (shape === "triangle") return "baseHeight";
+  if (shape === "parallelogram") return "baseHeight";
+  if (shape === "rhombus") return "diagonals";
+  if (shape === "circle") return "radius";
+  return null;
+};
 
 export default function Calculator({defaultShape="rectangle"}) {
   const {t}=useTranslation(), dispatch=useDispatch();
-  const [shape,setShape]=useState(defaultShape), [method,setMethod]=useState("baseHeight");
+  const [shape,setShape]=useState(defaultShape), [method,setMethod]=useState(defaultMethodFor(defaultShape));
   const [unit,setUnit]=useState("ft"), [v,setV]=useState({}), [result,setResult]=useState(null), [error,setError]=useState("");
-  const fields = shape==="rectangle"?["length","width"]:shape==="square"?["side"]:shape==="triangle"?(method==="baseHeight"?["base","height"]:["sideA","sideB","sideC"]):[];
+
+  const changeShape = (newShape) => {
+    setShape(newShape);
+    setMethod(defaultMethodFor(newShape));
+    setV({});
+    setResult(null);
+    setError("");
+  };
+
+  const changeMethod = (newMethod) => {
+    setMethod(newMethod);
+    setV({});
+    setResult(null);
+    setError("");
+  };
+
+  const fields =
+    shape==="rectangle" ? ["length","width"] :
+    shape==="square" ? ["side"] :
+    shape==="triangle" ? (method==="baseHeight" ? ["base","height"] : ["sideA","sideB","sideC"]) :
+    shape==="parallelogram" ? (method==="baseHeight" ? ["base","height"] : ["sideA","sideB","angle"]) :
+    shape==="trapezium" ? ["parallelSideA","parallelSideB","height"] :
+    shape==="rhombus" ? (method==="diagonals" ? ["diagonal1","diagonal2"] : ["side","height"]) :
+    shape==="circle" ? (method==="radius" ? ["radius"] : ["diameter"]) :
+    [];
+
+  const methodOptions =
+    shape==="triangle" ? [["baseHeight",t("baseHeight")],["threeSides",t("threeSides")]] :
+    shape==="parallelogram" ? [["baseHeight",t("baseHeight")],["sidesAngle",t("sidesAngle")]] :
+    shape==="rhombus" ? [["diagonals",t("diagonalsMethod")],["sideHeight",t("sideHeightMethod")]] :
+    shape==="circle" ? [["radius",t("radius")],["diameter",t("diameter")]] :
+    null;
+
   const calc=()=>{
     setError("");
     let sqft=0;
     if(shape==="rectangle") sqft=rectangle(v.length,v.width,unit);
     else if(shape==="square") sqft=square(v.side,unit);
     else if(shape==="triangle") sqft=method==="baseHeight"?triangleBaseHeight(v.base,v.height,unit):triangleSides(v.sideA,v.sideB,v.sideC,unit);
-    if(!sqft) {setError(shape==="triangle"&&method==="threeSides"?t("invalidTriangle"):"Please enter valid measurements.");setResult(null);return;}
+    else if(shape==="parallelogram") sqft=method==="baseHeight"?parallelogramBaseHeight(v.base,v.height,unit):parallelogramSidesAngle(v.sideA,v.sideB,v.angle,unit);
+    else if(shape==="trapezium") sqft=trapezium(v.parallelSideA,v.parallelSideB,v.height,unit);
+    else if(shape==="rhombus") sqft=method==="diagonals"?rhombusDiagonals(v.diagonal1,v.diagonal2,unit):rhombusSideHeight(v.side,v.height,unit);
+    else if(shape==="circle") sqft=method==="radius"?circleRadius(v.radius,unit):circleDiameter(v.diameter,unit);
+
+    if(!sqft) {
+      let msg = t("invalidInput");
+      if(shape==="triangle" && method==="threeSides") msg = t("invalidTriangle");
+      if(shape==="parallelogram" && method==="sidesAngle") msg = t("invalidAngle");
+      setError(msg);
+      setResult(null);
+      return;
+    }
     setResult(fromSqft(sqft));
   };
   const save=()=>{if(!result)return; dispatch(addHistory({id:crypto.randomUUID(),shape,method,unit,values:v,result,date:new Date().toISOString()}));};
-  const labels={length:t("length"),width:t("width"),side:t("side"),base:t("length"),height:t("height"),sideA:t("sideA"),sideB:t("sideB"),sideC:t("sideC")};
+  const labels={
+    length:t("length"), width:t("width"), side:t("side"), base:t("length"), height:t("height"),
+    sideA:t("sideA"), sideB:t("sideB"), sideC:t("sideC"),
+    parallelSideA:t("parallelSideA"), parallelSideB:t("parallelSideB"),
+    diagonal1:t("diagonal1"), diagonal2:t("diagonal2"),
+    radius:t("radius"), diameter:t("diameter"), angle:t("angle")
+  };
   return <div className="grid lg:grid-cols-5 gap-6">
     <section className="lg:col-span-2 card bg-base-100 shadow-xl">
       <div className="card-body">
         <h2 className="card-title">{t("calculator")}</h2>
         <label className="label"><span>{t("shape")}</span></label>
-        <select className="select select-bordered w-full" value={shape} onChange={e=>{setShape(e.target.value);setResult(null);}}>
-          <option value="rectangle">{t("rectangle")}</option><option value="square">{t("square")}</option><option value="triangle">{t("triangle")}</option>
+        <select className="select select-bordered w-full" value={shape} onChange={e=>changeShape(e.target.value)}>
+          <option value="rectangle">{t("rectangle")}</option>
+          <option value="square">{t("square")}</option>
+          <option value="triangle">{t("triangle")}</option>
+          <option value="parallelogram">{t("parallelogram")}</option>
+          <option value="trapezium">{t("trapezium")}</option>
+          <option value="rhombus">{t("rhombus")}</option>
+          <option value="circle">{t("circle")}</option>
         </select>
-        {shape==="triangle"&&<><label className="label"><span>{t("method")}</span></label>
-          <div className="join w-full"><button className={"join-item btn flex-1 "+(method==="baseHeight"?"btn-primary":"")} onClick={()=>setMethod("baseHeight")}>{t("baseHeight")}</button><button className={"join-item btn flex-1 "+(method==="threeSides"?"btn-primary":"")} onClick={()=>setMethod("threeSides")}>{t("threeSides")}</button></div>
+        {methodOptions&&<><label className="label"><span>{t("method")}</span></label>
+          <div className="join w-full">
+            {methodOptions.map(([key,label])=>
+              <button key={key} className={"join-item btn flex-1 "+(method===key?"btn-primary":"")} onClick={()=>changeMethod(key)}>{label}</button>
+            )}
+          </div>
         </>}
         {fields.map(f=><label key={f} className="form-control mt-2"><span className="label-text">{labels[f]}</span><input className="input input-bordered" type="number" min="0" value={v[f]??""} onChange={e=>setV({...v,[f]:e.target.value})}/></label>)}
         <label className="label mt-2"><span>{t("unit")}</span></label>
