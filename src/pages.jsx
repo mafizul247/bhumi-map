@@ -7,7 +7,7 @@ import Calculator from "./components/Calculator";
 import {fmt,fromSqft,SQFT_PER_DECIMAL,SQFT_PER_KATHA,SQFT_PER_BIGHA,SQFT_PER_ACRE} from "./utils/land";
 import {useState} from "react";
 
-const KEYWORDS = "Bangladesh land calculator, land measurement Bangladesh, Katha to Decimal, Decimal to Katha, Bigha calculator, jomi mapar hisab, parallelogram land area, trapezium land area, rhombus land area, circular land area, জমি মাপ, জমির হিসাব, শতাংশ থেকে কাঠা, সামান্তরিক জমি, ট্রাপিজিয়াম জমি, রম্বস জমি, বৃত্তাকার জমি";
+const KEYWORDS = "Bangladesh land calculator, land measurement Bangladesh, Katha to Decimal, Decimal to Katha, Bigha calculator, jomi mapar hisab, parallelogram land area, trapezium land area, rhombus land area, circular land area, ellipse land area, semicircle land area, sector land area, kite shape land, L shape land, T shape land, U shape land, C shape land, irregular polygon land area, জমি মাপ, জমির হিসাব, শতাংশ থেকে কাঠা, সামান্তরিক জমি, ট্রাপিজিয়াম জমি, রম্বস জমি, বৃত্তাকার জমি, উপবৃত্তাকার জমি, অর্ধবৃত্তাকার জমি, সেক্টর জমি, ঘুড়ি আকৃতির জমি, অনিয়মিত বহুভুজ, L আকৃতির জমি, T আকৃতির জমি, U আকৃতির জমি, C আকৃতির জমি";
 
 export function Home(){
   const {t}=useTranslation();
@@ -24,9 +24,12 @@ export function Home(){
     "inLanguage":["en","bn"],
     "offers":{"@type":"Offer","price":"0","priceCurrency":"BDT"},
     "featureList":[
-      "Rectangle land area calculator","Square land area calculator","Triangle land area calculator",
-      "Parallelogram land area calculator","Trapezium land area calculator","Rhombus land area calculator",
-      "Circular land area calculator","Katha, Bigha, Decimal, Acre, Hectare unit conversion"
+      "Rectangle, square and triangle land area calculator",
+      "Parallelogram, trapezium (including isosceles and right trapezium) and rhombus calculator",
+      "Circle, ellipse, semicircle, quarter circle, circular sector and circular segment calculator",
+      "Kite, irregular quadrilateral and irregular polygon (coordinate-based) calculator",
+      "L-shape, T-shape, U-shape, C-shape and other composite / multi-part land calculator",
+      "Katha, Bigha, Decimal, Acre, Hectare unit conversion"
     ]
   };
   return <>
@@ -51,7 +54,7 @@ export function Home(){
 export function CalculatorPage(){
   const {t}=useTranslation();
   return <div className="container mx-auto px-4 py-10">
-    <SEO title="Land Calculator Bangladesh | Rectangle, Circle, Rhombus, Trapezium | Bhumi Map" description={t("heroText")} keywords={KEYWORDS}/>
+    <SEO title="Land Calculator Bangladesh | 23 Shapes incl. Ellipse, Kite, L-Shape, Polygon | Bhumi Map" description={t("heroText")} keywords={KEYWORDS}/>
     <h1 className="text-3xl font-black mb-6">{t("calculator")}</h1>
     <Calculator/>
   </div>;
@@ -90,26 +93,60 @@ export function Units(){
   </div>;
 }
 
-export function Guide(){
-  const {t}=useTranslation();
-  const shapes = [
-    ["rectangle","Area = Length × Width."],
-    ["square", null],
+const GUIDE_GROUPS = [
+  ["basicShapes", [
+    ["rectangle","rectangleInfo"],
+    ["square", "squareInfo"],
     ["triangle","triangleInfo"],
     ["parallelogram","parallelogramInfo"],
-    ["trapezium","trapeziumInfo"],
     ["rhombus","rhombusInfo"],
+    ["kite","kiteInfo"],
+  ]],
+  ["circularShapes", [
     ["circle","circleInfo"],
+    ["ellipse","ellipseInfo"],
+    ["semicircle","semicircleInfo"],
+    ["quarterCircle","quarterCircleInfo"],
+    ["circularSector","circularSectorInfo"],
+    ["circularSegment","circularSegmentInfo"],
+  ]],
+  ["trapeziumShapes", [
+    ["trapezium","trapeziumInfo"],
+    ["isoscelesTrapezium","isoscelesTrapeziumInfo"],
+    ["rightTrapezium","rightTrapeziumInfo"],
+  ]],
+  ["irregularShapes", [
+    ["irregularQuadrilateral","irregularQuadrilateralInfo"],
+    ["irregularPolygon","irregularPolygonInfo"],
     ["irregular","irregularInfo"],
-  ];
+  ]],
+  ["compositeShapes", [
+    ["lShape","lShapeInfo"],
+    ["tShape","tShapeInfo"],
+    ["uShape","uShapeInfo"],
+    ["cShape","cShapeInfo"],
+    ["compositeShape","compositeShapeInfo"],
+    ["combinedShape","combinedShapeInfo"],
+  ]],
+];
+
+export function Guide(){
+  const {t}=useTranslation();
   return <div className="container mx-auto px-4 py-10 max-w-4xl">
-    <SEO title="Bangladesh Land Measurement Guide | All Shapes | Bhumi Map" description="Learn how to calculate rectangle, square, triangle, parallelogram, trapezium, rhombus, circular and irregular land area in Bangladesh." keywords={KEYWORDS}/>
+    <SEO title="Bangladesh Land Measurement Guide | 23 Land Shapes | Bhumi Map" description="Learn how to calculate rectangle, triangle, parallelogram, trapezium, rhombus, circle, ellipse, kite, irregular polygon, L-shape, T-shape and other composite land shapes in Bangladesh." keywords={KEYWORDS}/>
     <h1 className="text-3xl font-black mb-8">{t("guideTitle")}</h1>
-    <div className="space-y-5">
-      {shapes.map(([key,infoKey])=>
-        <div className="card bg-base-100 shadow p-6" key={key}>
-          <h2 className="text-xl font-bold">{t(key)}</h2>
-          <p>{infoKey ? (infoKey.endsWith("Info") ? t(infoKey) : infoKey) : "Area = Side × Side."}</p>
+    <div className="space-y-10">
+      {GUIDE_GROUPS.map(([groupKey,shapes])=>
+        <div key={groupKey}>
+          <h2 className="text-2xl font-black mb-4 opacity-80">{t(groupKey)}</h2>
+          <div className="space-y-5">
+            {shapes.map(([key,infoKey])=>
+              <div className="card bg-base-100 shadow p-6" key={key}>
+                <h3 className="text-xl font-bold">{t(key)}</h3>
+                <p>{infoKey.endsWith("Info") ? t(infoKey) : infoKey}</p>
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>
@@ -152,7 +189,11 @@ const FAQ_DATA = {
     ["How is a circular plot's area calculated?","Use π × radius². If you measured the distance across the plot instead, use π × (diameter ÷ 2)²."],
     ["Can I use this for legal land registration?","No. It is a calculation aid; verify legal measurements with official records and a qualified surveyor."],
     ["Does Bhumi Map work in Bengali?","Yes. Switch the language toggle in the header to view the entire app, including results, in বাংলা."],
-    ["Does it work in dark mode?","Yes. Use the sun/moon icon in the header to switch between light and dark themes; your choice is remembered."]
+    ["Does it work in dark mode?","Yes. Use the sun/moon icon in the header to switch between light and dark themes; your choice is remembered."],
+    ["How do I calculate an oddly shaped plot with 4+ corners?","Use Irregular Quadrilateral (enter both diagonals and the angle between them) for a 4-sided plot, or Irregular Polygon to enter every corner's X, Y coordinate for any number of sides — the app uses the Shoelace formula for an exact area."],
+    ["How do I calculate an L-shape, T-shape, U-shape or C-shape plot?","Split the plot into simple rectangles. For L, U and C shapes, measure the outer bounding rectangle and subtract the missing rectangular notch. For a T-shape, add the top bar rectangle and the stem rectangle together."],
+    ["My land has several separate rectangular parts — can I add them together?","Yes, choose Combined / Multiple Plots, add each rectangular part's length and width, and the app totals them automatically."],
+    ["How do I calculate a semicircular, quarter-circle or sector-shaped plot?","Semicircle uses half of π × radius², Quarter Circle uses a quarter of it, and Circular Sector uses (angle ÷ 360) × π × radius² for any pie-slice angle."]
   ],
   bn: [
     ["১ কাঠা সমান কত স্কয়ার ফিট?","১ কাঠা সাধারণত ৭২০ স্কয়ার ফিটের সমান ধরা হয়।"],
@@ -164,7 +205,11 @@ const FAQ_DATA = {
     ["বৃত্তাকার জমির ক্ষেত্রফল কীভাবে বের করব?","π × ব্যাসার্ধ² ব্যবহার করুন। ব্যাস জানা থাকলে π × (ব্যাস ÷ ২)² ব্যবহার করুন।"],
     ["এটি কি জমি রেজিস্ট্রেশনের জন্য ব্যবহার করা যাবে?","না। এটি শুধুমাত্র হিসাবের সহায়ক টুল; আইনগত পরিমাপের জন্য সরকারি রেকর্ড ও যোগ্য সার্ভেয়ারের মাধ্যমে যাচাই করুন।"],
     ["ভূমি মাপ কি বাংলায় কাজ করে?","হ্যাঁ। হেডারের ভাষা বাটনে ক্লিক করে পুরো অ্যাপটি, ফলাফলসহ, বাংলায় দেখতে পারবেন।"],
-    ["এটি কি ডার্ক মোডে কাজ করে?","হ্যাঁ। হেডারে সূর্য/চাঁদ আইকনে ক্লিক করে লাইট ও ডার্ক থিমের মধ্যে পরিবর্তন করুন; আপনার পছন্দ মনে রাখা হবে।"]
+    ["এটি কি ডার্ক মোডে কাজ করে?","হ্যাঁ। হেডারে সূর্য/চাঁদ আইকনে ক্লিক করে লাইট ও ডার্ক থিমের মধ্যে পরিবর্তন করুন; আপনার পছন্দ মনে রাখা হবে।"],
+    ["৪টির বেশি কোণবিশিষ্ট অনিয়মিত জমির হিসাব কীভাবে করব?","৪ বাহুর জমির জন্য অনিয়মিত চতুর্ভুজ (দুই কর্ণ ও তাদের মধ্যবর্তী কোণ দিন) ব্যবহার করুন, অথবা যেকোনো সংখ্যক বাহুর জন্য অনিয়মিত বহুভুজে প্রতিটি কোণবিন্দুর X, Y স্থানাঙ্ক দিন — Shoelace সূত্র ব্যবহার করে সঠিক ক্ষেত্রফল বের করা হয়।"],
+    ["L-আকৃতি, T-আকৃতি, U-আকৃতি বা C-আকৃতির জমির হিসাব কীভাবে করব?","জমিটিকে সাধারণ আয়তক্ষেত্রে ভাগ করুন। L, U ও C আকৃতির জন্য, বাইরের সম্পূর্ণ আয়তক্ষেত্র মেপে তার থেকে কাটা অংশ বাদ দিন। T-আকৃতির জন্য উপরের বার ও স্টেম অংশ দুটি আলাদাভাবে যোগ করুন।"],
+    ["আমার জমির একাধিক আলাদা আয়তক্ষেত্রাকার অংশ আছে — এগুলো একসাথে যোগ করা যাবে?","হ্যাঁ, সমন্বিত / একাধিক অংশের জমি নির্বাচন করে প্রতিটি অংশের দৈর্ঘ্য ও প্রস্থ দিন; অ্যাপ স্বয়ংক্রিয়ভাবে মোট ক্ষেত্রফল বের করবে।"],
+    ["অর্ধবৃত্তাকার, চতুর্থাংশ বৃত্ত বা সেক্টর আকৃতির জমির হিসাব কীভাবে করব?","অর্ধবৃত্তের জন্য ½ × π × ব্যাসার্ধ², চতুর্থাংশ বৃত্তের জন্য তার এক-চতুর্থাংশ, এবং যেকোনো কোণের সেক্টরের জন্য (কোণ ÷ ৩৬০) × π × ব্যাসার্ধ² ব্যবহার করা হয়।"]
   ]
 };
 
